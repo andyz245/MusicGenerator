@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import './Recorder.css'
+import './Recorder.css';
+import MusicPlayer from "./MusicPlayer.js";
 
 export default class Recorder extends Component {
 
@@ -13,7 +14,8 @@ export default class Recorder extends Component {
         super(props);
 
         this.state = {
-            recording: false
+            recording: false,
+            audio: 'null'
         };
     }
 
@@ -39,8 +41,10 @@ export default class Recorder extends Component {
                     self.mediaRecorder.onstop = function(e) {
                         const blob = new Blob(self.chunks, { 'type' : 'audio/ogg; codecs=opus' });
                         const audioURL = window.URL.createObjectURL(blob);
-                        console.log("at " + audioURL);
+                        
                         console.log(self.chunks);
+                        self.setState({audio:audioURL});
+                        console.log("at " + self.state.audio);
                     }
                })
          
@@ -87,6 +91,7 @@ export default class Recorder extends Component {
                 <section class="sound-clips">
 
                 </section>
+                <MusicPlayer audioData = {this.state.audio} />
             </div>
         )
     }
