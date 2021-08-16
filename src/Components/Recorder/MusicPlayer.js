@@ -16,6 +16,11 @@ export default class MusicPlayer extends Component {
           };
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log("updated with " + nextProps.audioData);
+        console.log(this.props.audioData);
+    }
+
     componentDidMount() {
         // get the audio element
         this.audioElement = document.querySelector('audio');
@@ -28,6 +33,7 @@ export default class MusicPlayer extends Component {
 
     handleClick = () => {
         console.log(this.audioElement);
+        console.log("source is " + this.props.audioData);
         // check if context is in suspended state (autoplay policy)
         if (this.audioContext.state === 'suspended') {
             console.log("Here");
@@ -44,13 +50,14 @@ export default class MusicPlayer extends Component {
         } else {
             this.audioElement.play();
             this.state.playing = true;
+            console.log("playing");
         }
     }
 
     render() {
         return (
             <div className="Play">
-                <audio src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/858/outfoxing.mp3" crossorigin="anonymous"></audio>
+                <audio src={this.props.audioData} crossorigin="anonymous"></audio>
                 <button data-playing="false" role="switch" aria-checked="false" onClick={this.handleClick}>
                 <span>Play/Pause</span>
                 </button>
