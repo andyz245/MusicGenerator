@@ -15,11 +15,19 @@ export default class Recorder extends Component {
 
         this.state = {
             recording: false,
-            audio: 'null'
+            audio: 'null',
+            recordings: []
         };
     }
 
     componentDidMount() {
+        /*fetch('http://127.0.0.1:5000/')
+        .then(res => res.json())
+        .then((data) => {
+            this.setState({ recordings: data })
+        })
+        .catch(console.log)*/
+
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             let self = this;
             console.log('getUserMedia supported.');
@@ -45,6 +53,11 @@ export default class Recorder extends Component {
                         console.log(self.chunks);
                         self.setState({audio:audioURL});
                         console.log("at " + self.state.audio);
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", 'http://127.0.0.1:5000/upload', true);
+                        //xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.send(blob);
                     }
                })
          
@@ -75,10 +88,7 @@ export default class Recorder extends Component {
 
             console.log("recorder stopped");
           
-            /*const blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
-            const audioURL = window.URL.createObjectURL(blob);
-            console.log("at " + audioURL);
-            console.log(this.chunks);*/
+            const clipName = prompt('Enter a name for your sound clip?','My unnamed clip');
         }
     }
 
